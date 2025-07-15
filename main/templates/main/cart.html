@@ -30,6 +30,11 @@
             {% csrf_token %}
             <button type="submit">Remove One</button>
           </form>
+          <form method="post" action="{% url 'remove_all_from_cart' id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Remove All</button>
+           </form>
+
         </li>
         {% endfor %}
       </ul>

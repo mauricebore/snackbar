@@ -17,21 +17,25 @@ def add_to_cart(request, item_id):
     item = get_object_or_404(MenuItem, id=item_id)
     cart = request.session.get('cart', {})
 
-    if str(item_id) in cart:
-        cart[str(item_id)]['quantity'] += 1
+    current_quantity_in_cart = cart.get(str(item_id), {}).get('quantity', 0)
+
+    if current_quantity_in_cart < item.quantity:
+        if str(item_id) in cart:
+            cart[str(item_id)]['quantity'] += 1
+        else:
+            cart[str(item_id)] = {
+                'name': item.name,
+                'price': float(item.price),
+                'quantity': 1,
+                'image': item.image,
+            }
+        messages.success(request, f"{item.name} added to cart.")
     else:
-        cart[str(item_id)] = {
-            'name': item.name,
-            'price': float(item.price),
-            'quantity': 1,
-            'image': item.image,
-        }
+        messages.error(request, f"Cannot add more {item.name}. Only {item.quantity} available.")
 
     request.session['cart'] = cart
-
-    messages.success(request, f"{item.name} added to cart.")
-    
     return redirect('menu')
+
 
 def view_cart(request):
     cart = request.session.get('cart', {})
@@ -71,6 +75,16 @@ def remove_from_cart(request, item_id):
     
     request.session['cart'] = cart
     return redirect('view_cart')
+
+def remove_all_from_cart(request, item_id):
+    cart = request.session.get('cart', {})
+
+    if str(item_id) in cart:
+        del cart[str(item_id)]
+    
+    request.session['cart'] = cart
+    return redirect('view_cart')
+
 
 
 # Create your views here.
