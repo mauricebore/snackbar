@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout Success | Snack Bar</title>
+  <link rel="stylesheet" href="{% static 'main/style.css' %}">
+</head>
+<body>
+  <nav>
+    <h1>Snack Bar</h1>
+    <ul>
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'menu' %}">Menu</a></li>
+      <li><a href="{% url 'view_cart' %}">Cart</a></li>
+      <li><a href="/admin/">Admin</a></li>
+    </ul>
+  </nav>
+
+  <section class="success">
+    <h2>Order Successful!</h2>
+    <p>Thank you for your order. Your order ID is {{ order.id }}.</p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Snack Bar. All rights reserved.</p>
+  </footer>
+</body>
+</html>
+

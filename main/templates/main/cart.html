@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Cart | Snack Bar</title>
+  <link rel="stylesheet" href="{% static 'main/style.css' %}">
+</head>
+<body>
+  <nav>
+    <h1>Snack Bar</h1>
+    <ul>
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'menu' %}">Menu</a></li>
+      <li><a href="{% url 'view_cart' %}">Cart</a></li>
+      <li><a href="/admin/">Admin</a></li>
+    </ul>
+  </nav>
+
+  <section class="cart">
+    <h2>Your Cart</h2>
+    {% if cart %}
+      <ul>
+        {% for id, item in cart.items %}
+        <li>
+          <img src="{{ item.image }}" alt="{{ item.name }}" width="50">
+          {{ item.name }} - GHS {{ item.price }} x {{ item.quantity }}
+          <form method="post" action="{% url 'remove_from_cart' id %}">
+            {% csrf_token %}
+            <button type="submit">Remove One</button>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+      <p><strong>Total:</strong> GHS {{ total }}</p>
+      
+      <form method="post" action="{% url 'checkout' %}">
+        {% csrf_token %}
+        <button type="submit">Proceed to Checkout</button>
+      </form>
+      
+
+      
+    {% else %}
+      <p>Your cart is empty.</p>
+    {% endif %}
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Snack Bar. All rights reserved.</p>
+  </footer>
+</body>
+</html>
+

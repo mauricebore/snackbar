@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menu | Snack Bar</title>
+  <link rel="stylesheet" href="{% static 'main/style.css' %}">
+</head>
+<body>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+      <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+        </ul>
+    {% endif %}
+
+  <nav>
+    <h1>Snack Bar</h1>
+    <ul>
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'menu' %}">Menu</a></li>
+      <li>
+        <a href="{% url 'view_cart' %}">
+           Cart
+           <span class="cart-badge">{{ cart_count }}</span>
+        </a>
+      </li>
+
+      <li><a href="/admin/">Admin</a></li>
+    </ul>
+  </nav>
+
+  <section class="menu">
+    <h2>Our Menu</h2>
+    <div class="menu-grid">
+      {% for item in items %}
+      <div class="menu-item">
+        <img src="{{ item.image }}" alt="{{ item.name }}" />
+        <h3>{{ item.name }}</h3>
+        <p>GHS {{ item.price }}</p>
+        <p>{{ item.description }}</p>
+        <p>Available: {{ item.quantity }}</p>
+
+        <form method="post" action="{% url 'add_to_cart' item.id %}">
+            {% csrf_token %}
+            <button type="submit">Add to Cart</button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Snack Bar. All rights reserved.</p>
+  </footer>
+</body>
+</html>
+
