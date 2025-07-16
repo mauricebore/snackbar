@@ -1,0 +1,37 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+ENV/
+env/
+
+# Django settings
+*.sqlite3
+*.pyc
+*.pyo
+*.pyd
+*.db
+
+# VSCode settings (if you use it)
+.vscode/
+
+# PyCharm settings
+.idea/
+
+# Environment variables
+.env
+
+# Migrations (optional if you don't want to track them)
+*/migrations/__pycache__/
+*/migrations/*.pyc
+
+# Static and media files (if generated)
+staticfiles/
+media/
+
+# System files
+.DS_Store
+Thumbs.db
+

@@ -76,14 +76,10 @@ def remove_from_cart(request, item_id):
     request.session['cart'] = cart
     return redirect('view_cart')
 
-def remove_all_from_cart(request, item_id):
-    cart = request.session.get('cart', {})
-
-    if str(item_id) in cart:
-        del cart[str(item_id)]
-    
-    request.session['cart'] = cart
+def clear_cart(request):
+    request.session['cart'] = {}
     return redirect('view_cart')
+
 
 
 
