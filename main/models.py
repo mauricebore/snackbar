@@ -5,7 +5,7 @@ class MenuItem(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     description = models.TextField(blank=True)
     quantity = models.PositiveIntegerField(default=0)
-    image = models.URLField(blank=True)
+    image = models.ImageField(upload_to='menu_images/')
 
     def __str__(self):
         return self.name

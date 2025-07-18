@@ -36,19 +36,25 @@
     <h2>Our Menu</h2>
     <div class="menu-grid">
       {% for item in items %}
-      <div class="menu-item">
-        <img src="{{ item.image }}" alt="{{ item.name }}" />
-        <h3>{{ item.name }}</h3>
-        <p>GHS {{ item.price }}</p>
-        <p>{{ item.description }}</p>
-        <p>Available: {{ item.quantity }}</p>
+        <div class="menu-item">
+           <h3>{{ item.name }}</h3>
+           <p>GHS {{ item.price }}</p>
+           <p>{{ item.description }}</p>
+           <p>Available: {{ item.quantity }}</p>
 
-        <form method="post" action="{% url 'add_to_cart' item.id %}">
-            {% csrf_token %}
-            <button type="submit">Add to Cart</button>
-        </form>
-      </div>
+           <form method="post" action="{% url 'add_to_cart' item.id %}">
+             {% csrf_token %}
+             <button type="submit">Add to Cart</button>
+           </form>
+
+           {% if item.image %}
+             <img src="{{ item.image.url }}" alt="{{ item.name }}" />
+           {% endif %}
+
+           
+        </div>
       {% endfor %}
+
     </div>
   </section>
 

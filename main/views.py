@@ -27,7 +27,7 @@ def add_to_cart(request, item_id):
                 'name': item.name,
                 'price': float(item.price),
                 'quantity': 1,
-                'image': item.image,
+                'image': item.image.url if item.image else '',
             }
         messages.success(request, f"{item.name} added to cart.")
     else:
