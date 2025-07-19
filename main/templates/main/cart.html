@@ -34,7 +34,7 @@
         </li>
         {% endfor %}
       </ul>
-      <p><strong>Total:</strong> GHS {{ total }}</p>
+      <h2><strong>Total:</strong> GHS {{ total }}</h2>
       
       <form method="post" action="{% url 'clear_cart' %}">
         {% csrf_token %}

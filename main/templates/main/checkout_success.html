@@ -23,6 +23,13 @@
     <p>Thank you for your order. Your order ID is {{ order.id }}.</p>
   </section>
 
+  <p>Would you like to make an order?</p>
+  <form method="post" action="{% url 'menu' %}">
+        {% csrf_token %}
+      <button type="submit">Yes</button>
+  </form>
+
+    
   <footer>
     <p>&copy; 2025 Snack Bar. All rights reserved.</p>
   </footer>
