@@ -8,13 +8,13 @@
   <link rel="stylesheet" href="{% static 'main/style.css' %}">
 </head>
 <body>
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-      <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-    {% endfor %}
-        </ul>
-    {% endif %}
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
   <nav>
     <h1>Snack Bar</h1>
@@ -27,54 +27,67 @@
            <span class="cart-badge">{{ cart_count }}</span>
         </a>
       </li>
-
       <li><a href="/admin/">Admin</a></li>
     </ul>
   </nav>
 
-  <section class="menu">
-  <h2>Biscuits</h2>
-  <div class="menu-grid">
-    {% for item in biscuits %}
-      <div class="menu-item">
-        <h3>{{ item.name }}</h3>
-        <p>GHS {{ item.price }}</p>
-        <p>{{ item.description }}</p>
-        <p>Available: {{ item.quantity }}</p>
+  <main>
+    <h1>Our Menu</h1>
 
-        <form method="post" action="{% url 'add_to_cart' item.id %}">
-          {% csrf_token %}
-          <button type="submit">Add to Cart</button>
-        </form>
+    <section aria-label="Biscuits">
+      <h2>Biscuits</h2>
+      {% if biscuits %}
+        <div class="menu-grid">
+          {% for item in biscuits %}
+            <div class="menu-item">
+              <h3>{{ item.name }}</h3>
+              <p>GHS {{ item.price }}</p>
+              <p>{{ item.description }}</p>
+              <p>Available: {{ item.quantity }}</p>
 
-        {% if item.image %}
-          <img src="{{ item.image.url }}" alt="{{ item.name }}" />
-        {% endif %}
-      </div>
-    {% endfor %}
-  </div>
+              <form method="post" action="{% url 'add_to_cart' item.id %}">
+                {% csrf_token %}
+                <button type="submit">Add to Cart</button>
+              </form>
 
-  <h2>Drinks</h2>
-  <div class="menu-grid">
-    {% for item in drinks %}
-      <div class="menu-item">
-        <h3>{{ item.name }}</h3>
-        <p>GHS {{ item.price }}</p>
-        <p>{{ item.description }}</p>
-        <p>Available: {{ item.quantity }}</p>
+              {% if item.image %}
+                <img src="{{ item.image.url }}" alt="{{ item.name }}" />
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No biscuits available at the moment.</p>
+      {% endif %}
+    </section>
 
-        <form method="post" action="{% url 'add_to_cart' item.id %}">
-          {% csrf_token %}
-          <button type="submit">Add to Cart</button>
-        </form>
+    <section aria-label="Drinks">
+      <h2>Drinks</h2>
+      {% if drinks %}
+        <div class="menu-grid">
+          {% for item in drinks %}
+            <div class="menu-item">
+              <h3>{{ item.name }}</h3>
+              <p>GHS {{ item.price }}</p>
+              <p>{{ item.description }}</p>
+              <p>Available: {{ item.quantity }}</p>
 
-        {% if item.image %}
-          <img src="{{ item.image.url }}" alt="{{ item.name }}" />
-        {% endif %}
-      </div>
-    {% endfor %}
-  </div>
-</section>
+              <form method="post" action="{% url 'add_to_cart' item.id %}">
+                {% csrf_token %}
+                <button type="submit">Add to Cart</button>
+              </form>
+
+              {% if item.image %}
+                <img src="{{ item.image.url }}" alt="{{ item.name }}" />
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No drinks available at the moment.</p>
+      {% endif %}
+    </section>
+  </main>
 
   <footer>
     <p>&copy; 2025 Snack Bar. All rights reserved.</p>

@@ -23,6 +23,9 @@
     <p>Thank you for your order. Your order ID is {{ order.id }}.</p>
   </section>
 
+  <h2>Thank you, {{ order.customer_name}}!</h2>
+  <p>Your order has been placed successfully.</p>
+
   <p>Would you like to make an order?</p>
   <form method="post" action="{% url 'menu' %}">
         {% csrf_token %}

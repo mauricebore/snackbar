@@ -120,3 +120,28 @@ footer {
   margin-left: 0.3rem;
 }
 
+
+button {
+  background-color: #f28b20; /* your snack bar orange */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 5px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #d97706; /* darker orange on hover */
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+
+
+

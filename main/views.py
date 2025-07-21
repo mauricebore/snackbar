@@ -52,26 +52,48 @@ def view_cart(request):
     return render(request, 'main/cart.html', {'cart': cart, 'total': total})
 
 def checkout(request):
-    if request.method == 'POST':
-        cart = request.session.get('cart', {})
-        if not cart:
-            return redirect('view_cart')
+    cart = request.session.get('cart', {})
+    if not cart:
+        messages.warning(request, "Your cart is empty.")
+        return redirect('view_cart')
 
-        # For simplicity, use a placeholder customer name or collect it via form later
-        order = Order.objects.create(customer_name="Walk-in Customer")
+    if request.method == 'POST':
+        customer_name = request.POST.get('customer_name', '').strip()
+        if not customer_name:
+            messages.error(request, "Please enter your name.")
+            return redirect('checkout')
+
+        # Check stock first before creating order
+        for id, item in cart.items():
+            menu_item = get_object_or_404(MenuItem, id=id)
+            if menu_item.quantity < item['quantity']:
+                messages.error(request, f"Not enough stock for {menu_item.name}.")
+                return redirect('view_cart')
+
+        # Create order only if all items are in stock
+        order = Order.objects.create(customer_name=customer_name)
 
         for id, item in cart.items():
+            menu_item = get_object_or_404(MenuItem, id=id)
             OrderItem.objects.create(
                 order=order,
                 item_name=item['name'],
                 price=item['price'],
                 quantity=item['quantity']
             )
-        # Clear cart after checkout
+            menu_item.quantity -= item['quantity']
+            menu_item.save()
+
         request.session['cart'] = {}
+        messages.success(request, f"Order placed successfully for {customer_name}.")
         return render(request, 'main/checkout_success.html', {'order': order})
+
     else:
-        return redirect('view_cart')
+        # Render checkout page with cart summary
+        total = sum(item['price'] * item['quantity'] for item in cart.values())
+        return render(request, 'main/checkout.html', {'cart': cart, 'total': total})
+
+
 
 def remove_from_cart(request, item_id):
     cart = request.session.get('cart', {})
