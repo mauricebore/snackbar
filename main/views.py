@@ -8,10 +8,19 @@ def home(request):
     return render(request, 'main/home.html', {'cart_count': cart_count})
 
 def menu(request):
-    items = MenuItem.objects.all()
+    biscuits = MenuItem.objects.filter(category='biscuits')
+    drinks = MenuItem.objects.filter(category='drinks')
     cart = request.session.get('cart', {})
     cart_count = sum(item['quantity'] for item in cart.values())
-    return render(request, 'main/menu.html', {'items': items, 'cart_count': cart_count})
+    
+    context = {
+        'biscuits': biscuits,
+        'drinks': drinks,
+        'cart_count': cart_count
+    }
+    
+    return render(request, 'main/menu.html', context)
+
 
 def add_to_cart(request, item_id):
     item = get_object_or_404(MenuItem, id=item_id)

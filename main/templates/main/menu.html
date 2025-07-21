@@ -33,30 +33,48 @@
   </nav>
 
   <section class="menu">
-    <h2>The Menu</h2>
-    <div class="menu-grid">
-      {% for item in items %}
-        <div class="menu-item">
-           <h3>{{ item.name }}</h3>
-           <p>GHS {{ item.price }}</p>
-           <p>{{ item.description }}</p>
-           <p>Available: {{ item.quantity }}</p>
+  <h2>Biscuits</h2>
+  <div class="menu-grid">
+    {% for item in biscuits %}
+      <div class="menu-item">
+        <h3>{{ item.name }}</h3>
+        <p>GHS {{ item.price }}</p>
+        <p>{{ item.description }}</p>
+        <p>Available: {{ item.quantity }}</p>
 
-           <form method="post" action="{% url 'add_to_cart' item.id %}">
-             {% csrf_token %}
-             <button type="submit">Add to Cart</button>
-           </form>
+        <form method="post" action="{% url 'add_to_cart' item.id %}">
+          {% csrf_token %}
+          <button type="submit">Add to Cart</button>
+        </form>
 
-           {% if item.image %}
-             <img src="{{ item.image.url }}" alt="{{ item.name }}" />
-           {% endif %}
+        {% if item.image %}
+          <img src="{{ item.image.url }}" alt="{{ item.name }}" />
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
 
-           
-        </div>
-      {% endfor %}
+  <h2>Drinks</h2>
+  <div class="menu-grid">
+    {% for item in drinks %}
+      <div class="menu-item">
+        <h3>{{ item.name }}</h3>
+        <p>GHS {{ item.price }}</p>
+        <p>{{ item.description }}</p>
+        <p>Available: {{ item.quantity }}</p>
 
-    </div>
-  </section>
+        <form method="post" action="{% url 'add_to_cart' item.id %}">
+          {% csrf_token %}
+          <button type="submit">Add to Cart</button>
+        </form>
+
+        {% if item.image %}
+          <img src="{{ item.image.url }}" alt="{{ item.name }}" />
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
 
   <footer>
     <p>&copy; 2025 Snack Bar. All rights reserved.</p>
