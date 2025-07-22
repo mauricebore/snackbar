@@ -67,8 +67,8 @@ def checkout(request):
         for id, item in cart.items():
             menu_item = get_object_or_404(MenuItem, id=id)
             if menu_item.quantity < item['quantity']:
-                messages.error(request, f"Not enough stock for {menu_item.name}.")
-                return redirect('view_cart')
+                messages.error(request, f"Sorry! It seems someone else just bought the last {menu_item.name}.")
+                return redirect('menu')
 
         # Create order only if all items are in stock
         order = Order.objects.create(customer_name=customer_name)
