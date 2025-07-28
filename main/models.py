@@ -27,7 +27,7 @@ class Order(models.Model):
         return f"Order {self.id} - {self.customer_name} at {self.created_at.strftime('%Y-%m-%d %H:%M')}"
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     item_name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     quantity = models.PositiveIntegerField()

@@ -1,6 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import MenuItem, Order, OrderItem
 from django.contrib import messages
+from django.db import transaction
+from django.db.models import Sum, F, FloatField
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.utils import timezone
+from datetime import timedelta
 
 def home(request):
     cart = request.session.get('cart', {})
@@ -63,36 +69,38 @@ def checkout(request):
             messages.error(request, "Please enter your name.")
             return redirect('checkout')
 
-        # Check stock first before creating order
-        for id, item in cart.items():
-            menu_item = get_object_or_404(MenuItem, id=id)
-            if menu_item.quantity < item['quantity']:
-                messages.error(request, f"Sorry! It seems someone else just bought the last {menu_item.name}.")
-                return redirect('menu')
+        try:
+            with transaction.atomic():  # Begin atomic transaction
+                for id, item in cart.items():
+                    menu_item = MenuItem.objects.select_for_update().get(id=id)
+                    if menu_item.quantity < item['quantity']:
+                        messages.error(request, f"Sorry! Only {menu_item.quantity} of {menu_item.name} left.")
+                        return redirect('menu')
 
-        # Create order only if all items are in stock
-        order = Order.objects.create(customer_name=customer_name)
+                order = Order.objects.create(customer_name=customer_name)
 
-        for id, item in cart.items():
-            menu_item = get_object_or_404(MenuItem, id=id)
-            OrderItem.objects.create(
-                order=order,
-                item_name=item['name'],
-                price=item['price'],
-                quantity=item['quantity']
-            )
-            menu_item.quantity -= item['quantity']
-            menu_item.save()
+                for id, item in cart.items():
+                    menu_item = MenuItem.objects.get(id=id)
+                    OrderItem.objects.create(
+                        order=order,
+                        item_name=item['name'],
+                        price=item['price'],
+                        quantity=item['quantity']
+                    )
+                    menu_item.quantity = F('quantity') - item['quantity']
+                    menu_item.save()
 
-        request.session['cart'] = {}
-        messages.success(request, f"Order placed successfully for {customer_name}.")
-        return render(request, 'main/checkout_success.html', {'order': order})
+            request.session['cart'] = {}
+            messages.success(request, f"Order placed successfully for {customer_name}.")
+            return render(request, 'main/checkout_success.html', {'order': order})
+
+        except MenuItem.DoesNotExist:
+            messages.error(request, "One of the items no longer exists.")
+            return redirect('menu')
 
     else:
-        # Render checkout page with cart summary
         total = sum(item['price'] * item['quantity'] for item in cart.values())
         return render(request, 'main/checkout.html', {'cart': cart, 'total': total})
-
 
 
 def remove_from_cart(request, item_id):
@@ -110,6 +118,34 @@ def remove_from_cart(request, item_id):
 def clear_cart(request):
     request.session['cart'] = {}
     return redirect('view_cart')
+
+
+@staff_member_required
+@login_required
+def order_history(request):
+    filter_option = request.GET.get('filter', 'all')
+    orders = Order.objects.prefetch_related('items').annotate(
+        total=Sum(F('items__price') * F('items__quantity'), output_field=FloatField())
+    ).order_by('-created_at')
+
+    today = timezone.now().date()
+
+    if filter_option == 'today':
+        orders = orders.filter(created_at__date=today)
+    elif filter_option == 'week':
+        start_week = today - timedelta(days=today.weekday())
+        orders = orders.filter(created_at__date__gte=start_week)
+    elif filter_option == 'month':
+        orders = orders.filter(created_at__month=today.month, created_at__year=today.year)
+
+    # Calculate grand total of all filtered orders
+    grand_total = sum(order.total or 0 for order in orders)
+
+    return render(request, 'main/order_history.html', {
+        'orders': orders,
+        'filter': filter_option,
+        'grand_total': grand_total,
+    })
 
 
 

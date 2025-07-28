@@ -11,11 +11,19 @@
     <nav>
         <h1>Snack Bar</h1>
         <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'menu' %}">Menu</a></li>
-            <li><a href="{% url 'view_cart' %}">Cart</a></li>
-            <li><a href="/admin/">Admin</a></li>
+           <li><a href="{% url 'home' %}">Home</a></li>
+           <li><a href="{% url 'menu' %}">Menu</a></li>
+           <li><a href="{% url 'view_cart' %}">Cart<span class="cart-badge">{{ cart_count }}</span></a></li>
+            
+           {# Only show these if user is staff/cashier/admin #}
+           {% if user.is_authenticated and user.is_staff %}
+             <li><a href="{% url 'order_history' %}">Order History</a></li>
+             <li><a href="/admin/">Admin</a></li>
+           {% endif %}
+    
+          
         </ul>
+
     </nav>
 
     <main>
