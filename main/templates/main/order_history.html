@@ -1,46 +1,66 @@
-{% extends 'main/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}Snack Bar{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+</head>
+<body>
+    <nav>
+        <h1>Snack Bar</h1>
+       
+    </nav>
 
-{% block content %}
-  <h1>Order History</h1>
+    <main>
+        {% block content %}
+          <h1>Order History</h1>
 
-  <div class="filter-buttons">
-    <form method="get">
-      <button type="submit" name="filter" value="all"
-        {% if request.GET.filter == "all" or not request.GET.filter %}class="active"{% endif %}>
-        All
-      </button>
-      <button type="submit" name="filter" value="today"
-        {% if request.GET.filter == "today" %}class="active"{% endif %}>
-        Today
-      </button>
-      <button type="submit" name="filter" value="week"
-        {% if request.GET.filter == "week" %}class="active"{% endif %}>
-        This Week
-      </button>
-      <button type="submit" name="filter" value="month"
-        {% if request.GET.filter == "month" %}class="active"{% endif %}>
-        This Month
-      </button>
-    </form>
-  </div>
+          <div class="filter-buttons">
+            <form method="get">
+              <button type="submit" name="filter" value="all"
+                {% if request.GET.filter == "all" or not request.GET.filter %}class="active"{% endif %}>
+                All
+              </button>
+              <button type="submit" name="filter" value="today"
+                {% if request.GET.filter == "today" %}class="active"{% endif %}>
+                Today
+              </button>
+              <button type="submit" name="filter" value="week"
+                {% if request.GET.filter == "week" %}class="active"{% endif %}>
+                This Week
+              </button>
+              <button type="submit" name="filter" value="month"
+                {% if request.GET.filter == "month" %}class="active"{% endif %}>
+                This Month
+              </button>
+            </form>
+          </div>
+          <div> <a href="{% url 'admin_dashboard' %}" style="margin-left: 105rem; padding: 0.5rem 1rem; background-color: #28a745; color: white; text-decoration: none; border-radius: 20px;">Return to Dashboard</a></div>
 
-  <h3>Grand Total: GHS {{ grand_total|floatformat:2 }}</h3>
+          <h3>Grand Total: GHS {{ grand_total|floatformat:2 }}</h3>
 
-  {% if orders %}
-    {% for order in orders %}
-      <div class="order">
-        <h2>Order ID: {{ order.id }} | Customer: {{ order.customer_name }} | Date: {{ order.created_at|date:"Y-m-d H:i" }}</h2>
-        <ul>
-          {% for item in order.items.all %}
-            <li>{{ item.item_name }} x {{ item.quantity }} = GHS {{ item.price|floatformat:2 }}</li>
-          {% endfor %}
-        </ul>
-        <p><strong>Total: GHS {{ order.total|floatformat:2 }}</strong></p>
-      </div>
-      <hr>
-    {% endfor %}
-  {% else %}
-    <p>No orders yet.</p>
-  {% endif %}
-{% endblock %}
+          {% if orders %}
+            {% for order in orders %}
+              <div class="order">
+                <h2>Order ID: {{ order.id }} | Customer: {{ order.customer_name }} | Date: {{ order.created_at|date:"Y-m-d H:i" }}</h2>
+                <ul>
+                  {% for item in order.items.all %}
+                    <li>{{ item.item_name }} x {{ item.quantity }} = GHS {{ item.price|floatformat:2 }}</li>
+                  {% endfor %}
+                </ul>
+                <p><strong>Total: GHS {{ order.total|floatformat:2 }}</strong></p>
+              </div>
+              <hr>
+            {% endfor %}
+          {% else %}
+            <p>No orders yet.</p>
+          {% endif %}
+        {% endblock %}
+    </main>
+
+    
+</body>
+</html>
 

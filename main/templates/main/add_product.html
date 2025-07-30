@@ -10,23 +10,24 @@
 <body>
     <nav>
         <h1>Snack Bar</h1>
-        <ul>
-           <li><a href="{% url 'home' %}">Home</a></li>
-           <li><a href="{% url 'menu' %}">Menu</a></li>
-           <li><a href="{% url 'view_cart' %}">Cart<span class="cart-badge">{{ cart_count }}</span></a></li>
-        </ul>
 
     </nav>
 
     <main>
         {% block content %}
-        <!-- page specific content here -->
+        <h2>Add New Product</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Add</button>
+            <a href="{% url 'product_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
         {% endblock %}
+
     </main>
 
-    <footer>
-        <p>&copy; 2025 Snack Bar. All rights reserved.</p>
-    </footer>
+   
 </body>
 </html>
+
 

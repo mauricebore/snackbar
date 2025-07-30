@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}Snack Bar{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+</head>
+<body>
+    <nav>
+        <h1>Snack Bar</h1>
+        
+    </nav>
+
+    <main>
+        
+        <h2>Edit User</h2>
+        <form method="post">
+          {% csrf_token %}
+          <label>Username:</label>
+          <input type="text" name="username" value="{{ user.username }}"><br>
+          <label>Email:</label>
+          <input type="email" name="email" value="{{ user.email }}"><br>
+          <button type="submit">Save</button>
+          <a href="{% url 'user_list' %}">Cancel</a>
+        </form>
+       
+    </main>
+
+    
+</body>
+</html>
+

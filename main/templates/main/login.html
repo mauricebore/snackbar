@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}Snack Bar{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+</head>
+<body>
+    <nav>
+        <h1>Snack Bar</h1>
+    </nav>
+
+    <main>
+          <h2>Login</h2>
+          <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Login</button>
+          </form>
+          <a href="{% url 'home' %}" class="btn btn-secondary">Go Back Home</a>
+          {% if form.errors %}
+            <p style="color: red;">Invalid credentials. Please try again.</p>
+          {% endif %}
+    </main>
+</body>
+</html>
+

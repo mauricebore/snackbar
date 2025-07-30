@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}Snack Bar{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+</head>
+<body>
+    <nav>
+        <h1>Snack Bar</h1>
+        <ul>
+           
+           
+           {# Only show these if user is staff/cashier/admin #}
+           {% if user.is_authenticated and user.is_staff %}
+            
+            
+             <a href="{% url 'logout' %}">Logout</a>
+           {% endif %}
+    
+          
+        </ul>
+
+    </nav>
+
+    <main>
+            <div class="admin-header">
+              <h1>Admin Dashboard</h1>
+              <p>Welcome, {{ request.user.username }}</p>
+            </div>
+
+            <div class="stats" style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+              <div class="card">
+                <h3>Total Users</h3>
+                <p>{{ total_users }}</p>
+              </div>
+              <div class="card">
+                <h3>Total Orders</h3>
+                <p>{{ total_orders }}</p>
+              </div>
+              <div class="card">
+                <h3>Total Products</h3>
+                <p>{{ total_products }}</p>
+              </div>
+            </div>
+
+            <!--  BUTTONS for Quick Tasks -->
+            <h2>Quick Actions</h2>
+            <div class="actions" style="margin-bottom: 2rem;">
+              <a href="{% url 'product_list' %}" style="padding: 0.5rem 1rem; background-color: #28a745; color: white; text-decoration: none; border-radius: 20px;" class="btn btn-info">Manage Products</a>
+              <a href="{% url 'order_history' %}" style="padding: 0.5rem 1rem; background-color: #28a745; color: white; text-decoration: none; border-radius: 20px;">Order History</a>
+              
+              <a href="{% url 'user_list' %}" style="padding: 0.5rem 1rem; background-color: #28a745; color: white; text-decoration: none; border-radius: 20px;">Manage Users</a>
+            </div>
+
+            <!--  Low Stock Section -->
+            <h2>Low Stock Items</h2>
+            <table>
+              <tr><th>Name</th><th>Quantity</th><th>Action</th></tr>
+              {% for item in low_stock_items %}
+                <tr>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>
+                    <a href="{% url 'restock_product' item.id %}" style="padding: 0.5rem 1rem; background-color: orange; color: white; text-decoration: none; border-radius: 20px;" class="btn btn-warning btn-sm">Restock</a>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr><td colspan="3">All items sufficiently stocked.</td></tr>
+              {% endfor %}
+            </table>
+
+            <!-- 📑 Recent Orders -->
+            <h2>Recent Orders</h2>
+            <table>
+              <tr><th>Order ID</th><th>Customer</th><th>Date</th></tr>
+              {% for order in recent_orders %}
+                <tr>
+                  <td>{{ order.id }}</td>
+                  <td>{{ order.customer_name }}</td>
+                  <td>{{ order.created_at|date:"M d, Y H:i" }}</td>
+                </tr>
+              {% empty %}
+                <tr><td colspan="3">No recent orders found.</td></tr>
+              {% endfor %}
+            </table>
+
+    </main>
+</body>
+</html>
+

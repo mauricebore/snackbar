@@ -1,23 +1,47 @@
-{% extends 'main/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}Snack Bar{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+</head>
+<body>
+    <nav>
+        <h1>Snack Bar</h1>
+       
+    </nav>
 
-{% block content %}
-  <h2>Checkout</h2>
+    <main>
+          <h2>Checkout</h2>
 
-  <form method="post">
-    {% csrf_token %}
-    <label for="customer_name">Customer Name:</label>
-    <input type="text" name="customer_name" id="customer_name" required>
+          <form method="post">
+            {% csrf_token %}
+            <label for="customer_name">Customer Name:</label>
+            <input type="text" name="customer_name" id="customer_name" required>
 
-    <h3>Order Summary</h3>
-    <ul>
-        {% for id, item in cart.items %}
-        <li>{{ item.name }} x {{ item.quantity }} = GHS {{ item.price|floatformat:2 }}</li>
-        {% endfor %}
-    </ul>
+            <h3>Order Summary</h3>
+            <ul>
+                {% for id, item in cart.items %}
+                <li>{{ item.name }} x {{ item.quantity }} = GHS {{ item.price|floatformat:2 }}</li>
+                {% endfor %}
+            </ul>
 
-    <p><strong>Total:</strong> GHS {{ total|floatformat:2 }}</p>
+            <p><strong>Total:</strong> GHS {{ total|floatformat:2 }}</p>
 
-    <button type="submit">Place Order</button>
-  </form>
-{% endblock %}
+            <button type="submit">Place Order</button>
+          </form>
+          <form method="post" action="{% url 'view_cart' %}">
+                {% csrf_token %}
+              <button type="submit">Go Back</button>
+          </form>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Snack Bar. All rights reserved.</p>
+    </footer>
+</body>
+</html>
 
