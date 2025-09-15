@@ -135,11 +135,16 @@ LOGIN_REDIRECT_URL = '/admin-panel/'  # or any valid path
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-import os
 
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # for collectstatic
+
+# Media (optional, if using product images)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEBUG = False
-
-ALLOWED_HOSTS = ['.onrender.com']
+ALLOWED_HOSTS = ['snackbar-3.onrender.com']  # Your Render URL

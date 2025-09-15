@@ -50,5 +50,8 @@ class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('order', 'item_name', 'price', 'quantity')
     search_fields = ('item_name',)
 
+def total_sales(self, obj):
+    return sum(item.price * item.quantity for item in obj.items.all())
+total_sales.short_description = "Total Order Value"
 
 # Register your models here.
