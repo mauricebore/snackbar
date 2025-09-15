@@ -10,10 +10,21 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
 
+from django.shortcuts import render
+from .models import MenuItem
+
 def home(request):
+    biscuits = MenuItem.objects.filter(category='biscuits')
+    drinks = MenuItem.objects.filter(category='drinks')
     cart = request.session.get('cart', {})
     cart_count = sum(item['quantity'] for item in cart.values())
-    return render(request, 'main/home.html', {'cart_count': cart_count})
+    
+    return render(request, 'main/home.html', {
+        'biscuits': biscuits,
+        'drinks': drinks,
+        'cart_count': cart_count
+    })
+
 
 def menu(request):
     biscuits = MenuItem.objects.filter(category='biscuits')

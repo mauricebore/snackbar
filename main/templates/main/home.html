@@ -1,9 +1,60 @@
 {% extends 'main/base.html' %}
+{% load static %}
 
 {% block content %}
-  <section class="hero">
+  <!-- Hero Section -->
+  <section class="hero text-center my-5">
       <h2>Welcome to Snack Bar!</h2>
       <p>Delicious bites anytime, anywhere.</p>
   </section>
-{% endblock %}
 
+  <!-- Biscuits Section -->
+  <section class="products container my-5">
+      <h3 class="text-center mb-4">Biscuits</h3>
+      <div class="row">
+          {% for product in biscuits %}
+              <div class="col-md-3 mb-4">
+                  <div class="card h-100">
+                      {% if product.image %}
+                          <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                      {% else %}
+                          <img src="{% static 'images/default.png' %}" class="card-img-top" alt="{{ product.name }}">
+                      {% endif %}
+                      <div class="card-body text-center">
+                          <h5 class="card-title">{{ product.name }}</h5>
+                          <p class="card-text">GHS {{ product.price }}</p>
+                          <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">
+                              Add to Cart
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          {% endfor %}
+      </div>
+  </section>
+
+  <!-- Drinks Section -->
+  <section class="products container my-5">
+      <h3 class="text-center mb-4">Drinks</h3>
+      <div class="row">
+          {% for product in drinks %}
+              <div class="col-md-3 mb-4">
+                  <div class="card h-100">
+                      {% if product.image %}
+                          <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                      {% else %}
+                          <img src="{% static 'images/default.png' %}" class="card-img-top" alt="{{ product.name }}">
+                      {% endif %}
+                      <div class="card-body text-center">
+                          <h5 class="card-title">{{ product.name }}</h5>
+                          <p class="card-text">GHS {{ product.price }}</p>
+                          <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">
+                              Add to Cart
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          {% endfor %}
+      </div>
+  </section>
+{% endblock %}

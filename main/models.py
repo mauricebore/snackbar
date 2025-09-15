@@ -36,5 +36,8 @@ class OrderItem(models.Model):
         return f"{self.item_name} x {self.quantity}"
 
 
+image = models.ImageField(upload_to='menu_images/', blank=True, null=True)
+
+
 
 # Create your models here.

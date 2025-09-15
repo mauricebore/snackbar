@@ -22,6 +22,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
     path('', views.home, name='home'),
     path('menu/', views.menu, name='menu'),
     path('add-to-cart/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
@@ -49,3 +50,5 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
