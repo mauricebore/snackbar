@@ -137,14 +137,25 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+from pathlib import Path
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # for collectstatic
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Media (optional, if using product images)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+DEBUG = False   # important for production
 
-DEBUG = False
-ALLOWED_HOSTS = ['snackbar-3.onrender.com']  # Your Render URL
+ALLOWED_HOSTS = ["*", "snackbar-3.onrender.com"]
+
+INSTALLED_APPS = [
+    # ...
+    "django.contrib.staticfiles",
+    "main",   # your app
+]
+
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # add this just after SecurityMiddleware
+    # ...
+]
+
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
