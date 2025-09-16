@@ -134,3 +134,13 @@ LOGIN_REDIRECT_URL = '/admin-panel/'  # or any valid path
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+
+# Tell Django where your static files are during development
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
+# Where collected files will be stored (when running collectstatic)
+STATIC_ROOT = BASE_DIR / "staticfiles"
