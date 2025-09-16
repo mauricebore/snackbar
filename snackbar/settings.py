@@ -44,3 +44,16 @@ DEBUG = False
 # Add your Render domain here
 ALLOWED_HOSTS = ["snackbar-3.onrender.com", "127.0.0.1", "localhost"]
 
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',   # <-- this one is required
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+    # your custom apps
+    'main',   # or whatever you named your app
+]
+
