@@ -24,10 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-p*vwh5px-3hif@%_tn$shv8p#yu)3#jhq5!8u=o*x*180@#tm-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-
+DEBUG = False  # Make sure this is False in production
+ALLOWED_HOSTS = ['snackbar-3.onrender.com', 'localhost', '127.0.0.1']
 
 # Application definition
 
