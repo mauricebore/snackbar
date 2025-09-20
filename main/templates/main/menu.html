@@ -1,95 +1,89 @@
 {% extends 'main/base.html' %}
 {% load static %}
-
 {% block title %}Menu | Snack Bar{% endblock %}
-
 {% block content %}
-  {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-
-  <h1>Our Menu</h1>
-
-  <section aria-label="Biscuits">
-    <h2>Biscuits</h2>
-    {% if biscuits %}
-      <div class="menu-grid">
-        {% for item in biscuits %}
-          <div class="menu-item">
-            <h3>{{ item.name }}</h3>
-            <p>GHS {{ item.price }}</p>
-            <p>{{ item.description }}</p>
-            <p>Available: {{ item.quantity }}</p>
-
-            {% if item.quantity == 0 %}
-              <p style="color: red; font-weight: bold;">Out of Stock</p>
-            {% elif item.quantity < 5 %}
-              <p style="color: orange; font-weight: bold;">Low Stock</p>
-            {% endif %}
-
-            <form method="post" action="{% url 'add_to_cart' item.id %}">
-              {% csrf_token %}
-              <button type="submit" {% if item.quantity == 0 %} disabled {% endif %}>
-                {% if item.quantity == 0 %}
-                  Out of Stock
-                {% else %}
-                  Add to Cart
-                {% endif %}
-              </button>
-            </form>
-
-            {% if item.image %}
-              <img src="{{ item.image.url }}" alt="{{ item.name }}" />
-            {% endif %}
-          </div>
-        {% endfor %}
-      </div>
-    {% else %}
-      <p>No biscuits available at the moment.</p>
-    {% endif %}
-  </section>
-
-  <section aria-label="Drinks">
-    <h2>Drinks</h2>
-    {% if drinks %}
-      <div class="menu-grid">
-        {% for item in drinks %}
-          <div class="menu-item">
-            <h3>{{ item.name }}</h3>
-            <p>GHS {{ item.price }}</p>
-            <p>{{ item.description }}</p>
-            <p>Available: {{ item.quantity }}</p>
-
-            {% if item.quantity == 0 %}
-              <p style="color: red; font-weight: bold;">Out of Stock</p>
-            {% elif item.quantity < 5 %}
-              <p style="color: orange; font-weight: bold;">Low Stock</p>
-            {% endif %}
-
-            <form method="post" action="{% url 'add_to_cart' item.id %}">
-              {% csrf_token %}
-              <button type="submit" {% if item.quantity == 0 %} disabled {% endif %}>
-                {% if item.quantity == 0 %}
-                  Out of Stock
-                {% else %}
-                  Add to Cart
-                {% endif %}
-              </button>
-            </form>
-
-            {% if item.image %}
-              <img src="{{ item.image.url }}" alt="{{ item.name }}" />
-            {% endif %}
-          </div>
-        {% endfor %}
-      </div>
-    {% else %}
-      <p>No drinks available at the moment.</p>
-    {% endif %}
-  </section>
+{% if messages %}
+<ul class="messages">
+{% for message in messages %}
+<li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+<h1>Our Menu</h1>
+<section aria-label="Biscuits">
+<h2>Biscuits</h2>
+{% if biscuits %}
+<div class="menu-grid">
+{% for item in biscuits %}
+<div class="menu-item">
+<h3>{{ item.name }}</h3>
+<p>GHS {{ item.price }}</p>
+<p>{{ item.description }}</p>
+<p>Available: {{ item.quantity }}</p>
+{% if item.quantity == 0 %}
+<p style="color: red; font-weight: bold;">Out of Stock</p>
+{% elif item.quantity < 5 %}
+<p style="color: orange; font-weight: bold;">Low Stock</p>
+{% endif %}
+<form method="post" action="{% url 'add_to_cart' item.id %}">
+{% csrf_token %}
+<button type="submit" {% if item.quantity == 0 %} disabled {% endif %}>
+{% if item.quantity == 0 %}
+ Out of Stock
+{% else %}
+ Add to Cart
+{% endif %}
+</button>
+</form>
+{% if item.image %}
+    <!-- Extract just the filename from the full path and serve as static file -->
+    {% with image_name=item.image.name|cut:'menu_images/' %}
+        <img src="{% static 'main/images/' %}{{ image_name }}" alt="{{ item.name }}" />
+    {% endwith %}
+{% endif %}
+</div>
+{% endfor %}
+</div>
+{% else %}
+<p>No biscuits available at the moment.</p>
+{% endif %}
+</section>
+<section aria-label="Drinks">
+<h2>Drinks</h2>
+{% if drinks %}
+<div class="menu-grid">
+{% for item in drinks %}
+<div class="menu-item">
+<h3>{{ item.name }}</h3>
+<p>GHS {{ item.price }}</p>
+<p>{{ item.description }}</p>
+<p>Available: {{ item.quantity }}</p>
+{% if item.quantity == 0 %}
+<p style="color: red; font-weight: bold;">Out of Stock</p>
+{% elif item.quantity < 5 %}
+<p style="color: orange; font-weight: bold;">Low Stock</p>
+{% endif %}
+<form method="post" action="{% url 'add_to_cart' item.id %}">
+{% csrf_token %}
+<button type="submit" {% if item.quantity == 0 %} disabled {% endif %}>
+{% if item.quantity == 0 %}
+ Out of Stock
+{% else %}
+ Add to Cart
+{% endif %}
+</button>
+</form>
+{% if item.image %}
+    <!-- Extract just the filename from the full path and serve as static file -->
+    {% with image_name=item.image.name|cut:'menu_images/' %}
+        <img src="{% static 'main/images/' %}{{ image_name }}" alt="{{ item.name }}" />
+    {% endwith %}
+{% endif %}
+</div>
+{% endfor %}
+</div>
+{% else %}
+<p>No drinks available at the moment.</p>
+{% endif %}
+</section>
 {% endblock %}
-

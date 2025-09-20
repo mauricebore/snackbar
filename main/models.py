@@ -12,7 +12,7 @@ class MenuItem(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     description = models.TextField(blank=True)
     quantity = models.PositiveIntegerField(default=0)
-    image = models.ImageField(upload_to='media/menu_images/')
+    image = models.ImageField(upload_to='menu_images/')
     category = models.CharField(max_length=30, choices=CATEGORY_CHOICES, default='drinks')
 
     def __str__(self):
@@ -36,7 +36,7 @@ class OrderItem(models.Model):
         return f"{self.item_name} x {self.quantity}"
 
 
-image = models.ImageField(upload_to='media/menu_images/', blank=True, null=True)
+image = models.ImageField(upload_to='menu_images/', blank=True, null=True)
 
 
 
