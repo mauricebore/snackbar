@@ -1,41 +1,38 @@
 {% extends 'main/base.html' %}
 {% load static %}
-
 {% block title %}Your Cart | Snack Bar{% endblock %}
-
 {% block content %}
-  <section class="cart">
-    <h2>Your Cart</h2>
-    {% if cart %}
-      <ul>
-        {% for id, item in cart.items %}
-          <li>
-            {% if item.image %}
-              <img src="{{ item.image }}" alt="{{ item.name }}" width="50">
-            {% endif %}
-            {{ item.name }} - GHS {{ item.price }} x {{ item.quantity }}
-            <form method="post" action="{% url 'remove_from_cart' id %}">
-              {% csrf_token %}
-              <button type="submit">Remove One</button>
-            </form>
-          </li>
-        {% endfor %}
-      </ul>
-
-      <h2><strong>Total:</strong> GHS {{ total }}</h2>
-
-      <form method="post" action="{% url 'clear_cart' %}">
-        {% csrf_token %}
-        <button type="submit">Clear Cart</button>
-      </form>
-
-      <form method="post" action="{% url 'checkout' %}">
-        {% csrf_token %}
-        <button type="submit">Proceed to Checkout</button>
-      </form>
-    {% else %}
-      <p>Your cart is empty.</p>
-    {% endif %}
-  </section>
+<section class="cart">
+<h2>Your Cart</h2>
+{% if cart %}
+<ul>
+{% for id, item in cart.items %}
+<li>
+{% if item.image %}
+    <!-- Convert media URL to static file path -->
+    {% with image_name=item.image|cut:'/media/menu_images/' %}
+        <img src="{% static 'main/images/' %}{{ image_name }}" alt="{{ item.name }}" width="50">
+    {% endwith %}
+{% endif %}
+{{ item.name }} - GHS {{ item.price }} x {{ item.quantity }}
+<form method="post" action="{% url 'remove_from_cart' id %}">
+{% csrf_token %}
+<button type="submit">Remove One</button>
+</form>
+</li>
+{% endfor %}
+</ul>
+<h2><strong>Total:</strong> GHS {{ total }}</h2>
+<form method="post" action="{% url 'clear_cart' %}">
+{% csrf_token %}
+<button type="submit">Clear Cart</button>
+</form>
+<form method="post" action="{% url 'checkout' %}">
+{% csrf_token %}
+<button type="submit">Proceed to Checkout</button>
+</form>
+{% else %}
+<p>Your cart is empty.</p>
+{% endif %}
+</section>
 {% endblock %}
-
