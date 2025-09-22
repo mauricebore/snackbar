@@ -313,15 +313,15 @@ th, td {
   text-align: left;
 }
 
-/* Force mobile layout for both sections */
+/* Force mobile layout for ALL col-6 elements, not just in .products */
 @media (max-width: 768px) {
   .container {
     padding: 0 0.5rem;
   }
   
-  /* Ensure Bootstrap cards show 2 per row on mobile - FORCE IT */
-  .products .col-6 {
-    padding: 0.25rem;
+  /* Target ALL col-6 elements on the page */
+  .col-6 {
+    padding: 0.25rem !important;
     flex: 0 0 50% !important;
     max-width: 50% !important;
   }
