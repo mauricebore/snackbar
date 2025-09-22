@@ -3,13 +3,41 @@
 {% block content %}
 <!-- Hero Section -->
 <section class="hero text-center my-5">
-<h2>Welcome to Snack Bar!</h2>
+<h1>Welcome to Snack Bar!</h1>
 <p>Delicious bites anytime, anywhere.</p>
 </section>
 
 <!-- Biscuits Section -->
 <section class="products container my-5">
-<h3 class="text-center mb-4">Biscuits</h3>
+<h2 class="text-center mb-4">Biscuits</h2>
+<div class="row">
+{% for product in biscuits %}
+<div class="col-6 col-md-3 mb-4">
+<div class="card h-100">
+{% if product.image %}
+    <!-- Extract just the filename from the full path -->
+    {% with image_name=product.image.name|cut:'menu_images/' %}
+        <img src="{% static 'main/images/' %}{{ image_name }}" class="card-img-top" alt="{{ product.name }}">
+    {% endwith %}
+{% else %}
+    <img src="{% static 'main/images/default.png' %}" class="card-img-top" alt="{{ product.name }}">
+{% endif %}
+<div class="card-body text-center">
+<h3 class="card-title">{{ product.name }}</h3>
+<p class="card-text">GHS {{ product.price }}</p>
+<a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">
+ Add to Cart
+</a>
+</div>
+</div>
+</div>
+{% endfor %}
+</div>
+</section>
+
+<!-- Biscuits Section -->
+<section class="products container my-5">
+<h4 class="text-center mb-4">Drinks</h4>
 <div class="row">
 {% for product in biscuits %}
 <div class="col-6 col-md-3 mb-4">
@@ -34,32 +62,3 @@
 {% endfor %}
 </div>
 </section>
-
-<!-- Drinks Section -->
-<section class="products container my-5">
-<h3 class="text-center mb-4">Drinks</h3>
-<div class="row">
-{% for product in drinks %}
-<div class="col-md-3 mb-4">
-<div class="card h-100">
-{% if product.image %}
-    <!-- Extract just the filename from the full path -->
-    {% with image_name=product.image.name|cut:'menu_images/' %}
-        <img src="{% static 'main/images/' %}{{ image_name }}" class="card-img-top" alt="{{ product.name }}">
-    {% endwith %}
-{% else %}
-    <img src="{% static 'main/images/default.png' %}" class="card-img-top" alt="{{ product.name }}">
-{% endif %}
-<div class="card-body text-center">
-<h5 class="card-title">{{ product.name }}</h5>
-<p class="card-text">GHS {{ product.price }}</p>
-<a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">
- Add to Cart
-</a>
-</div>
-</div>
-</div>
-{% endfor %}
-</div>
-</section>
-{% endblock %}
