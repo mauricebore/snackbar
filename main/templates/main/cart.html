@@ -45,25 +45,9 @@
 {% csrf_token %}
 <button type="submit" class="btn btn-warning">Clear Cart</button>
 </form>
-<form method="post" action="{% url 'checkout' %}" class="d-inline">
-{% csrf_token %}
-<button type="submit" class="btn btn-success btn-lg">Proceed to Checkout</button>
-</form>
 </div>
+<!-- Payment instructions div goes here -->
+<div class="alert alert-info mt-3">
+<h5 class="alert-heading">Payment Instructions</h5>
+<p class="mb-0">Please kindly make payment to this MoMo number: <strong>0256386040</strong>. Have a nice day!</p>
 </div>
-</div>
-</div>
-</div>
-{% else %}
-<div class="text-center">
-<div class="card">
-<div class="card-body">
-<h3 class="card-title">Your cart is empty</h3>
-<p class="card-text">Browse our menu to add some delicious items!</p>
-<a href="{% url 'menu' %}" class="btn btn-primary">View Menu</a>
-</div>
-</div>
-</div>
-{% endif %}
-</div>
-{% endblock %}
