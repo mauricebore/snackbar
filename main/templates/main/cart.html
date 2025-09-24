@@ -3,51 +3,71 @@
 {% block title %}Your Cart | Snack Bar{% endblock %}
 {% block content %}
 <div class="container my-4">
-<h2 class="text-center mb-4">Your Cart</h2>
-{% if cart %}
-<div class="row">
-{% for id, item in cart.items %}
-<div class="col-6 col-md-4 col-lg-3 mb-4">
-<div class="card h-100">
-{% if item.image %}
-    <!-- Convert media URL to static file path -->
-    {% with image_name=item.image|cut:'/media/menu_images/' %}
-        <img src="{% static 'main/images/' %}{{ image_name }}" class="card-img-top" alt="{{ item.name }}">
-    {% endwith %}
-{% else %}
-    <img src="{% static 'main/images/default.png' %}" class="card-img-top" alt="{{ item.name }}">
-{% endif %}
-<div class="card-body text-center d-flex flex-column">
-<h5 class="card-title">{{ item.name }}</h5>
-<p class="card-text">GHS {{ item.price }}</p>
-<p class="card-text"><strong>Quantity: {{ item.quantity }}</strong></p>
-<p class="card-text text-primary"><strong>Subtotal: GHS {{ item.price|floatformat:2 }}</strong></p>
-<div class="mt-auto">
-<form method="post" action="{% url 'remove_from_cart' id %}">
-{% csrf_token %}
-<button type="submit" class="btn btn-danger btn-sm">Remove One</button>
-</form>
-</div>
-</div>
-</div>
-</div>
-{% endfor %}
-</div>
+    <h2 class="text-center mb-4">Your Cart</h2>
+    {% if cart %}
+        <div class="row">
+            {% for id, item in cart.items %}
+            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    {% if item.image %}
+                        <!-- Convert media URL to static file path -->
+                        {% with image_name=item.image|cut:'/media/menu_images/' %}
+                            <img src="{% static 'main/images/' %}{{ image_name }}" class="card-img-top" alt="{{ item.name }}">
+                        {% endwith %}
+                    {% else %}
+                        <img src="{% static 'main/images/default.png' %}" class="card-img-top" alt="{{ item.name }}">
+                    {% endif %}
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                        <p class="card-text">GHS {{ item.price }}</p>
+                        <p class="card-text"><strong>Quantity: {{ item.quantity }}</strong></p>
+                        <p class="card-text text-primary"><strong>Subtotal: GHS {{ item.price|floatformat:2 }}</strong></p>
+                        <div class="mt-auto">
+                            <form method="post" action="{% url 'remove_from_cart' id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Remove One</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 
-<!-- Cart Summary -->
-<div class="row mt-4">
-<div class="col-12">
-<div class="card">
-<div class="card-body text-center">
-<h3 class="card-title text-success"><strong>Total: GHS {{ total|floatformat:2 }}</strong></h3>
-<div class="mt-3">
-<form method="post" action="{% url 'clear_cart' %}" class="d-inline me-3">
-{% csrf_token %}
-<button type="submit" class="btn btn-warning">Clear Cart</button>
-</form>
+        <!-- Cart Summary -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 class="card-title text-success mb-3"><strong>Total: GHS {{ total|floatformat:2 }}</strong></h3>
+                        
+                        <!-- Clear Cart Button -->
+                        <div class="mb-3">
+                            <form method="post" action="{% url 'clear_cart' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-warning">Clear Cart</button>
+                            </form>
+                        </div>
+
+                        <!-- Payment Instructions -->
+                        <div class="alert alert-info">
+                            <h5 class="alert-heading">Payment Instructions</h5>
+                            <p class="mb-0">Please kindly make payment to this MoMo number: <strong>0256386040</strong>. Have a nice day!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Your cart is empty</h3>
+                    <p class="card-text">Browse our menu to add some delicious items!</p>
+                    <a href="{% url 'menu' %}" class="btn btn-primary">View Menu</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 </div>
-<!-- Payment instructions div goes here -->
-<div class="alert alert-info mt-3">
-<h5 class="alert-heading">Payment Instructions</h5>
-<p class="mb-0">Please kindly make payment to this MoMo number: <strong>0256386040</strong>. Have a nice day!</p>
-</div>
+{% endblock %}
